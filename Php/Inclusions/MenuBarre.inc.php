@@ -1,3 +1,0 @@
-<?php
-// Barre de navigation
-?>

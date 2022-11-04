@@ -1,0 +1,16 @@
+header, main, nav, footer {
+    border : thin black solid;
+    margin : 3px;
+    padding : 5px;
+
+}
+
+footer {
+    background-color :#CCCCCC;
+}
+
+main, nav {
+    display: inline-block;
+    vertical-align: top;
+    min-width: 40%;
+}
