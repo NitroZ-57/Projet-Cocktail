@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("Php/Inclusions/Donnees.inc.php");
+include("Inclusions/Donnees.inc.php");
 
 
 ?>
@@ -24,7 +24,7 @@ include("Php/Inclusions/Donnees.inc.php");
     </form>
 
 <?php
-        include("Php/Inclusions/ZoneConnexion.php");
+        include("Inclusions/ZoneConnexion.php");
 ?>
 
 
@@ -43,10 +43,7 @@ include("Php/Inclusions/Donnees.inc.php");
     <!-- TODO -->
 </main>
 
-
-
-<footer>
-    <i> Made by Comte Quentin, Perin nicolas & Polkowski romain </i>
-</footer>
-
+<?php 
+include("Inclusions/footer.html");
+?>
 </html>
