@@ -1,0 +1,49 @@
+
+header, main, nav, footer {
+    border : thin black solid;
+    margin : 3px;
+    padding : 5px;
+}
+
+footer {
+    background-color :#CCCCCC;
+}
+
+main, nav {
+    display: inline-block;
+    vertical-align: top;
+}
+nav {
+    width: 30%;
+}
+main {
+    width: 60%;
+}
+
+.favoris {
+    background-color: red;
+    
+}
+.cocktail-img {
+    width: 100px;
+    margin: 3px;
+}
+
+.cocktail-div {
+    display: inline-block;
+    border : thin black solid;
+    width: 30%;
+    margin: 5px;
+    font-size: small;
+}
+
+.cocktail-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
