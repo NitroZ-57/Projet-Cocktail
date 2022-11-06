@@ -13,18 +13,18 @@ if(!isset($_GET["cocktail"])) { // aucun cokctail passe en parametre
     exit();
 }
 
-$cocktail_name = remplace_car_accentues_et_maj($_GET["cocktail"]);
-$mon_cocktail = array();
+$cocktail_parametre = remplace_car_accentues_et_maj($_GET["cocktail"]);
+$cocktail = array();
 
-foreach($Recettes as $cockatil) {
-    $titre = remplace_car_accentues_et_maj($cockatil["titre"]);
-    if(strpos($titre, $cocktail_name) !== false) {
-        $mon_cocktail = $cockatil;
+foreach($Recettes as $cocktails) {
+    $titre = remplace_car_accentues_et_maj($cocktails["titre"]);
+    if(strpos($titre, $cocktail_parametre) !== false) {
+        $cocktail = $cocktails;
         break;
     }
 }
 
-if(empty($mon_cocktail)) { // le cokctail est invalide
+if(empty($cocktail)) { // le cokctail est invalide
     header('Location: ../index.php');
     exit();
 }
@@ -45,15 +45,20 @@ if(empty($mon_cocktail)) { // le cokctail est invalide
 </head>
 
 <header>
-    <a href="../index.php"> <input type="button" value="Retour" /> </a>
+    <a href="../index.php"> <span> Retour </span> </a>
 </header>
 
 
 <main>
 <pre>
 <?php
-print_r($mon_cocktail); // TODO BETTER
+print_r($cocktail); // TODO BETTER
+$nom_cocktail = nom_du_cocktail($cocktail["titre"]);
+$nom_image = "../Photos/".$nom_cocktail.".jpg";
+if(!file_exists($nom_image)) 
+    $nom_image = "../Photos/cocktail.png";
 ?>
+<img class="cocktail-img"  src="<?php echo $nom_image; ?>" />
 </pre>
 </main>
 

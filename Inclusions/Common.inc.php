@@ -50,5 +50,26 @@ function remplace_car_accentues_et_maj($chaine) {
     return $chaine;
 }
 
+function nom_du_cocktail($cocktail) {
+    if( preg_match('#(^[^\(]*)#i', $cocktail, $regs) ) {
+        return $regs[1];
+    }
+    else 
+        return false;
+}
+
+function nom_image_cocktail($cocktail) {
+    if(preg_match('#(^[^\(]*)#i', $cocktail, $regs)) {
+        $nom_image = "Photos/".str_replace(' ', '_',trim($regs[1])).".jpg";
+        return $nom_image;
+        if(file_exists($nom_image))
+            return $nom_image;
+        else 
+            return "Photos/cocktail.png";
+    }
+    else
+        return false;
+}
+
 
 ?>
