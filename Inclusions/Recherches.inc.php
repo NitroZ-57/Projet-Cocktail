@@ -5,6 +5,49 @@
     </fieldset>
 </form>
 <?php
+    function retourLigne() {//fonction à utiliser dans les blocs php
+        ?> <br /><?php
+    }
+
+    //procédure qui ajoute la recette si elle contient ingredient (ou un de ses "fils") dans le tableau recettesValides
+    function RecettesContenantIngredient($ingredient, $hierarchie, $recettes, &$recettesValides, &$indiceRecettesValides, &$nbTotalIng, $recettesBlacklist) {
+        retourLigne();
+        retourLigne();
+        echo "ingredient : ".$ingredient;
+        retourLigne();
+        retourLigne();
+        
+        foreach($recettes as $recette) {
+            if(!in_array($recette, $recettesBlacklist)) {
+                if(in_array($ingredient, $recette["index"])) {//si l'aliment est ingrédient de la recette
+                    echo $recette["titre"].", ";
+                    
+                    $indiceValide = -1; //la recette est par défaut absente des recettes déjà trouvées (-1 -> absente)
+                    foreach($recettesValides as $indiceRecette => $RecetteValide) {
+                        if($RecetteValide["Cocktail"] == $recette) { //si la recette en question a déjà été trouvée
+                            $indiceValide = $indiceRecette;
+                        }
+                    }
+                    
+                    if($indiceValide == -1) { //si c'est la première fois qu'on trouve la recette
+                        $recettesValides[$indiceRecettesValides]["Cocktail"] = $recette; //on ajoute la recette à la liste de résultats
+                        $recettesValides[$indiceRecettesValides]["nbIngredientsRecherches"] = 1; //on initialise à 1
+                        $indiceRecettesValides++;
+                    }
+                    else {
+                        $recettesValides[$indiceValide]["nbIngredientsRecherches"]++; //sinon on peut accéder au nombre d'ingrédients présents et on incrémente ce nombre
+                    }
+                }
+            }
+        }
+        if(!empty($hierarchie[$ingredient]['sous-categorie'])) { //si l'aliment a des sous categories, on les évalue
+            foreach($hierarchie[$ingredient]["sous-categorie"] as $sousIngredient) {
+                $nbTotalIng++;
+                RecettesContenantIngredient($sousIngredient, $hierarchie, $recettes, $recettesValides, $indiceRecettesValides, $nbTotalIng); //on vérifie récursivement si l'aliment est ingrédient de la recette
+            }
+        }
+    }
+
 include "Donnees.inc.php";
 //TODO traitement des doublons (avec + et -) en entrée à faire?
     $finalTab = array();
@@ -50,7 +93,6 @@ include "Donnees.inc.php";
         echo "tableau d'elements coherents : "; print_r($finalTab);
     ?>
     <br />
-
 
     <?php 
         
@@ -103,82 +145,33 @@ include "Donnees.inc.php";
         //TRAITEMENT DES RECETTES
         echo "Recettes correspondantes : "; //affichage
         $RecettesValides = array();
+        $RecettesBlacklist = array();
         $indice = 0;
         $nbIngTotal = count($IngSouhaites);
-        //echo $nbIngTotal;
-        foreach($IngSouhaites as $ingredient) {
-            foreach($Recettes as $Recette) {
-                if(in_array($ingredient, $Recette["index"])) {//dans le cas où l'aliment est une feuille du tableau Hiérarchie
-                    echo $Recette["titre"].", ";
-                    
-                    $indiceValide = -1; //la recette est par défaut absente des recettes déjà trouvées (-1 -> absente)
-                    foreach($RecettesValides as $indiceRecette => $RecetteValide) {
-                        if($RecetteValide["Cocktail"] == $Recette) { //si la recette en question a déjà été trouvée
-                            $indiceValide = $indiceRecette;
-                        }
-                    }
 
-                    if($indiceValide == -1) { //si c'est la première fois qu'on trouve la recette
-                        $RecettesValides[$indice]["Cocktail"] = $Recette; //on ajoute la recette à la liste de résultats
-                        $RecettesValides[$indice]["nbIngredientsRecherches"] = 1; //on initialise à 1
-                        $indice++;
-                    }
-                    else {
-                        $RecettesValides[$indiceValide]["nbIngredientsRecherches"]++; //sinon on peut accéder au nombre d'ingrédients présents et on incrémente ce nombre
-                    }
+        foreach($IngNonSouhaites as $ingredient) { //pour tous les ingrédients non souhaités
+            foreach($Recettes as $recette) {
+                if(in_array($ingredient, $recette["index"])) {//si l'aliment est ingrédient de la recette
+                    $RecettesBlacklist[] = $recette; //alors on l'ajoute à la liste des recettes à ne pas afficher en résultat
                 }
-                
-                /*
-                else if(isset($Hierarchie[$ingredient]["sous-categorie"])) { //dans le cas où l'aliment n'est pas une feuille (il faut traiter toutes ses sous-catégories) //TODO
-                    foreach($Hierarchie[$ingredient]["sous-categorie"] as $sousIngredient) {
-                        if(in_array($sousIngredient, $Recette["index"])) {
-
-                        } 
-                        
-                    }
-                    while
-
-                }
-                */
             }
         }
 
-    } 
+        foreach($IngSouhaites as $ingredient) {
+            retourLigne();
+            retourLigne();
+            RecettesContenantIngredient($ingredient, $Hierarchie, $Recettes, $RecettesValides, $indice, $nbIngTotal, $RecettesBlacklist);
+            retourLigne();
+        }
+        retourLigne();
     ?>
     <br /><br />
 <?php //affichage
-    foreach($RecettesValides as $Recette) {
-        echo $Recette["Cocktail"]["titre"]
-        .", nbIngredientsRecherches :".$Recette["nbIngredientsRecherches"]
-        .", pourcentage de satisfaction : ".number_format(($Recette["nbIngredientsRecherches"] * 100) / $nbIngTotal,2)."%";
-        ?><br /><?php
+        foreach($RecettesValides as $Recette) {
+            echo $Recette["Cocktail"]["titre"]
+            .", nbIngredientsRecherches :".$Recette["nbIngredientsRecherches"]
+            .", pourcentage de satisfaction : ".number_format(($Recette["nbIngredientsRecherches"] * 100) / $nbIngTotal,2)."%";
+            ?><br /><?php
+        }
     }
-?>
-
-
-<?php
-/* NOTES :
-si une recette contient un ingrédient "-", son score passe directement à 0 %
-
-
-0 =>
-    array (
-    "Cocktail" => array (
-            'titre' => 'Alerte à Malibu (cocktail de la couleurs des fameux maillots de bains... ou presque)',
-            'ingredients' => '50 cl de malibu coco|50 cl de gloss cerise|1 l de jus de goyave blanche|1 poignée de griottes',
-            'preparation' => 'Mélanger tous les ingrédients ensemble dans un grand pichet. Placer au frais au moins 3 heures avant de déguster. Tchin tchin !!',
-            'index' => 
-            array (
-                0 => 'Malibu',
-                1 => 'Cerise',
-                2 => 'Jus de goyave',
-                3 => 'Cerise griotte',
-            ),
-        ),
-    "nbIngredientsRecherches" => x;
-    )
-
-Pour calculer le score, on stockerai le nb total d'ingredients et on ferait:
-($RecettesValides[indice]["nbIngredientsRecherches"] * 100) / nbTotalIng
-*/
 ?>
