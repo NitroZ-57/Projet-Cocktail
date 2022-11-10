@@ -16,8 +16,14 @@ include("Inclusions/Common.inc.php");
 
     <form action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Navigation"> 
         <input type="submit" value="Navigation" name="page" />
+    </form>
+    
+    </form action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Recettes Favorites">
         <input type="submit" value="Recettes Favorites" name="page"/>
-        Recherche : <input type="text" value="" name="recherche" />
+    </form>
+
+    <form  action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Recherche">
+        Recherche : <input type="text" value="" name="Recherche" />
         <input type="submit" value="Recherche" name="page"/>
     </form>
 <?php
