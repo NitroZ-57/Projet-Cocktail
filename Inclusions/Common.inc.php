@@ -1,7 +1,7 @@
 <?php
 
 include("Donnees.inc.php");
-
+$_SERVER["Recettes"] = $Recettes;
 /*
     Retourne une chaine de caractère :
         - Remplace tous les caractères accentués d'une chaine par des caractères non accentués
@@ -83,23 +83,87 @@ function nom_image_cocktail($cocktail) {
 }
 
 /*
-    Ajoute une recette aux favoris ou l'enleve si elle existe deja
+    Ajoute une recette aux favoris ou l'enleve si elle existe deja 
     Prends en compte si l'utilisateur est connecté ou non (si $_SESSION["utilisateur"]["est_connecte"] est vrai ou non )
         - Si oui ajoute la recette dans $_SESSION["utilisateur"]["favories"] 
         - Si non ajoute la recette dans $_SESSION["favories"] 
+
+    A DEBUGGER
 */
 function ajouter_favoris($recette) {
 
+    $nom_cocktail = nom_du_cocktail($recette["titre"]);
+    $nom_complet_cocktail = $recette["titre"];
+
+
+    if(!isset($_SESSION["utilisateur"]) || !$_SESSION["utilisateur"]["est_connecte"]) { // si l'utilisateur n'est pas connecte
+        if(isset($_SESSION["favories"][$nom_cocktail])) { // la cle existe deja
+            unset($_SESSION["favories"][$nom_cocktail]);
+            $supprimer = true;
+        }
+        else {
+            if(!isset($_SESSION["favories"])) 
+                $_SESSION["favories"] = array();
+            array_push($_SESSION["favories"], $nom_cocktail);
+        }
+    }
+    else {
+        if(isset($_SESSION["utilisateur"]["favories"])) {
+            if(isset($_SESSION["utilisateur"]["favories"][$nom_cocktail])) { // la cle existe deja
+                unset($_SESSION["utilisateur"]["favories"][$nom_cocktail]);
+                $supprimer = true;
+            }
+            else {
+                if(!isset($_SESSION["utilisateur"]["favories"])) 
+                    $_SESSION["utilisateur"]["favories"] = array();
+                array_push($_SESSION["utilisateur"]["favories"], $nom_cocktail);
+            }
+        } 
+        else {
+            if(!isset($_SESSION["utilisateur"]["favories"])) 
+                $_SESSION["utilisateur"]["favories"] = array();
+            array_push($_SESSION["utilisateur"]["favories"], $nom_cocktail);
+        }
+    }
 }
+
+/*
+    Retourne vraie si la recette est favorie, faux sinon
+    Prends en compte si l'utilisateur est connecté ou non
+
+    A DEBUGGER
+*/
+function est_favorie($recette) {
+    $nom_cocktail = nom_du_cocktail($recette["titre"]);
+    $nom_complet_cocktail = $recette["titre"];
+
+
+    if(!isset($_SESSION["utilisateur"]) || !$_SESSION["utilisateur"]["est_connecte"]) { // si l'utilisateur n'est pas connecte
+        return array_key_exists($nom_cocktail, $_SESSION["favories"]);
+    }
+    else {
+        if(isset($_SESSION["utilisateur"]["favories"]))
+            return array_key_exists($nom_cocktail, $_SESSION["utilisateur"]["favories"]);
+        else 
+            return false;
+    }
+}
+
+
+
 /*
     Donne le code HTML pour afficher un ensemble de recette selon un tableau de recette donné en paramètre
+
+    A DEBUGGER
 */
 function afficher_recettes($recettes) {
+    global $Recettes;
     foreach($recettes as $cocktail) {
         $nom_cocktail = nom_du_cocktail($cocktail["titre"]);
         $nom_image = "Photos/".$nom_cocktail.".jpg";
         if(!file_exists($nom_image)) 
             $nom_image = "Photos/cocktail.png";
+        if(isset($c))
     ?>
     
     
@@ -107,7 +171,7 @@ function afficher_recettes($recettes) {
             <div class="cocktail-div">
                 <span class="cocktail-header"> 
                     <span> <?php echo $nom_cocktail; ?> </span> 
-                    <span class="favoris"> Favoris </span> 
+                    <span class="<?php if(est_favorie($cocktail)) echo "favoris"; ?>"> Favoris </span> 
                 </span>
                 <center> <img class="cocktail-img" src="<?php echo $nom_image; ?>" /> </center> 
                 <ul>

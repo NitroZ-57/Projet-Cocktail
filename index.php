@@ -20,9 +20,6 @@ include("Inclusions/Common.inc.php");
         Recherche : <input type="text" value="" name="recherche" />
         <input type="submit" value="Recherche" name="page"/>
     </form>
-    <form action="<?php $_SERVER['PHP_SELF'] ?>" method="post" name="Connexion">
-
-    </form>
 <?php
         include("Inclusions/ZoneConnexion.inc.php");
 ?>
