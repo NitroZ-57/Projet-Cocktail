@@ -1,8 +1,13 @@
 <?php
 
+include("Donnees.inc.php");
 
-
-
+/*
+    Retourne une chaine de caractère :
+        - Remplace tous les caractères accentués d'une chaine par des caractères non accentués
+        - Remplace tous les caractères majuscule d'une chaine par des caractères minuscules
+        - Enlève les espaces au début et à la fin de la chaine
+*/
 function remplace_car_accentues_et_maj($chaine) {
     $chaine = trim($chaine);
     $foo = array(
@@ -50,6 +55,9 @@ function remplace_car_accentues_et_maj($chaine) {
     return $chaine;
 }
 
+/*
+    Retourne le nom d'un cocktail à partir d'un nom à rallonge (ceux donné dans les index de $Recette dans Donnees.inc.php)
+*/
 function nom_du_cocktail($cocktail) {
     if( preg_match('#(^[^\(]*)#i', $cocktail, $regs) ) {
         return $regs[1];
@@ -58,6 +66,9 @@ function nom_du_cocktail($cocktail) {
         return false;
 }
 
+/*
+    Retourne le nom d'une image d'un cocktail à partir d'un nom à rallonge (ceux donné dans les index de $Recette dans Donnees.inc.php)
+*/
 function nom_image_cocktail($cocktail) {
     if(preg_match('#(^[^\(]*)#i', $cocktail, $regs)) {
         $nom_image = "Photos/".str_replace(' ', '_',trim($regs[1])).".jpg";
@@ -71,5 +82,48 @@ function nom_image_cocktail($cocktail) {
         return false;
 }
 
+/*
+    Ajoute une recette aux favoris ou l'enleve si elle existe deja
+    Prends en compte si l'utilisateur est connecté ou non (si $_SESSION["utilisateur"]["est_connecte"] est vrai ou non )
+        - Si oui ajoute la recette dans $_SESSION["utilisateur"]["favories"] 
+        - Si non ajoute la recette dans $_SESSION["favories"] 
+*/
+function ajouter_favoris($recette) {
 
+}
+/*
+    Donne le code HTML pour afficher un ensemble de recette selon un tableau de recette donné en paramètre
+*/
+function afficher_recettes($recettes) {
+    foreach($recettes as $cocktail) {
+        $nom_cocktail = nom_du_cocktail($cocktail["titre"]);
+        $nom_image = "Photos/".$nom_cocktail.".jpg";
+        if(!file_exists($nom_image)) 
+            $nom_image = "Photos/cocktail.png";
+    ?>
+    
+    
+        <a href="<?php echo "index.php?page=".$nom_cocktail; ?>">
+            <div class="cocktail-div">
+                <span class="cocktail-header"> 
+                    <span> <?php echo $nom_cocktail; ?> </span> 
+                    <span class="favoris"> Favoris </span> 
+                </span>
+                <center> <img class="cocktail-img" src="<?php echo $nom_image; ?>" /> </center> 
+                <ul>
+    <?php
+        foreach($cocktail["index"] as $ingredient) {
+    ?>
+                    <li> <?php echo 
+                            $ingredient; 
+                        ?> </li>
+    <?php
+            }       
+    ?>
+                </ul>
+            </div>
+        </a>
+    <?php
+    }
+}
 ?>
