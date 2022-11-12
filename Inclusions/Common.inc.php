@@ -93,36 +93,32 @@ function nom_image_cocktail($cocktail) {
 function ajouter_favoris($recette) {
 
     $nom_cocktail = nom_du_cocktail($recette["titre"]);
-    $nom_complet_cocktail = $recette["titre"];
-
 
     if(!isset($_SESSION["utilisateur"]) || !$_SESSION["utilisateur"]["est_connecte"]) { // si l'utilisateur n'est pas connecte
         if(isset($_SESSION["favories"][$nom_cocktail])) { // la cle existe deja
             unset($_SESSION["favories"][$nom_cocktail]);
-            $supprimer = true;
         }
         else {
             if(!isset($_SESSION["favories"])) 
                 $_SESSION["favories"] = array();
-            array_push($_SESSION["favories"], $nom_cocktail);
+            $_SESSION["favories"][$nom_cocktail] = $recette;
         }
     }
     else {
         if(isset($_SESSION["utilisateur"]["favories"])) {
             if(isset($_SESSION["utilisateur"]["favories"][$nom_cocktail])) { // la cle existe deja
                 unset($_SESSION["utilisateur"]["favories"][$nom_cocktail]);
-                $supprimer = true;
             }
             else {
                 if(!isset($_SESSION["utilisateur"]["favories"])) 
                     $_SESSION["utilisateur"]["favories"] = array();
-                array_push($_SESSION["utilisateur"]["favories"], $nom_cocktail);
+                $_SESSION["utilisateur"]["favories"][$nom_cocktail] = $recette;
             }
         } 
         else {
             if(!isset($_SESSION["utilisateur"]["favories"])) 
                 $_SESSION["utilisateur"]["favories"] = array();
-            array_push($_SESSION["utilisateur"]["favories"], $nom_cocktail);
+            $_SESSION["utilisateur"]["favories"][$nom_cocktail] = $recette; 
         }
     }
 }
@@ -135,15 +131,13 @@ function ajouter_favoris($recette) {
 */
 function est_favorie($recette) {
     $nom_cocktail = nom_du_cocktail($recette["titre"]);
-    $nom_complet_cocktail = $recette["titre"];
-
 
     if(!isset($_SESSION["utilisateur"]) || !$_SESSION["utilisateur"]["est_connecte"]) { // si l'utilisateur n'est pas connecte
-        return array_key_exists($nom_cocktail, $_SESSION["favories"]);
+        return isset($_SESSION["favories"][$nom_cocktail]);
     }
     else {
         if(isset($_SESSION["utilisateur"]["favories"]))
-            return array_key_exists($nom_cocktail, $_SESSION["utilisateur"]["favories"]);
+            return isset($_SESSION["utilisateur"]["favories"][$nom_cocktail]);
         else 
             return false;
     }
