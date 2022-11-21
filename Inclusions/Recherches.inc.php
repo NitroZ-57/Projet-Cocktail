@@ -49,7 +49,6 @@
         }
     }
 
-include "Donnees.inc.php";
 //TODO traitement des doublons (avec + et -) en entrée à faire?
     $finalTab = array();
     if(isset($_POST['Recherche'])) {

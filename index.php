@@ -1,8 +1,6 @@
 <?php
 session_start();
-include("Inclusions/Donnees.inc.php");
 include("Inclusions/Common.inc.php");
-
 ?>
 
 
@@ -16,65 +14,47 @@ include("Inclusions/Common.inc.php");
 
 <header>
 
-    <form action="<?php $_SERVER['PHP_SELF'] ?>"> 
-        <input type="submit" value="Navigation" name="navigation" />
-        <input type="button" value="Recettes favories" name="recettes favories"/>
-        Recherche : <input type="text" value="" name="recherche" />
-        <input type="submit" value="Valider" name="valider"/>
+    <form action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Navigation"> 
+        <input type="submit" value="Navigation" name="page" />
+    </form>
+    
+    </form action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Recettes Favorites">
+        <input type="submit" value="Recettes Favorites" name="page"/>
     </form>
 
+    <form  action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Recherche">
+        Recherche : <input type="text" value="" name="Recherche" />
+        <input type="submit" value="Recherche" name="page"/>
+    </form>
 <?php
-        include("Inclusions/ZoneConnexion.php");
+        include("Inclusions/ZoneConnexion.inc.php");
 ?>
 
 
 </header>
 
-<nav>
-    <h3> Aliment courant </h3>
-    <!-- TODO -->
-    <h4> Sous-catégories </h4>
-    <!-- TODO -->
-</nav>
-
-
-<main>
-    <h3> Liste des Cocktails </h3>
 <?php
-foreach($Recettes as $cocktail) {
-$nom_cocktail = nom_du_cocktail($cocktail["titre"]);
-$nom_image = "Photos/".$nom_cocktail.".jpg";
-if(!file_exists($nom_image)) 
-    $nom_image = "Photos/cocktail.png";
-?>
+if(!isset($_GET["page"])) {
+    include("Inclusions/Menu.inc.php");
+}
 
+elseif($_GET["page"] === "Navigation") {
+    include("Inclusions/Navigation.inc.php");
+}
+elseif($_GET["page"] === "Recherche") {
+    include("Inclusions/Recherches.inc.php");
+}
+elseif($_GET["page"] === "Recettes Favorites") {
+    include("Inclusions/RecettesFavorites.inc.php");
+}
 
-    <a href="<?php echo "Php/DetailCocktail.php?cocktail=".$nom_cocktail; ?>">
-        <div class="cocktail-div">
-            <span class="cocktail-header"> 
-                <span> <?php echo $nom_cocktail; ?> </span> 
-                <span class="favoris"> Favoris </span> 
-            </span>
-            <center> <img class="cocktail-img" src="<?php echo $nom_image; ?>" /> </center> 
-            <ul>
-<?php
-    foreach($cocktail["index"] as $ingredient) {
-?>
-                <li> <?php echo 
-                        $ingredient; 
-                    ?> </li>
-<?php
-    }       
-?>
-            </ul>
-        </div>
-    </a>
-<?php
+else {
+    include("Inclusions/DetailCocktail.inc.php");
 }
 ?>
-</main>
 
-<?php 
-include("Inclusions/footer.html");
-?>
+
+<footer>
+    <i> Made by Comte Quentin, Perin nicolas & Polkowski romain </i>
+</footer>
 </html>
