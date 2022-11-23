@@ -10,6 +10,7 @@ include("Inclusions/Common.inc.php");
     <title> Gestion de Cocktails </title>
     <meta charset="UTF-8" />
     <link rel="stylesheet" media="screen" type="text/css" title="style" href="Css/common.css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"> </script>
 </head>
 
 <header>
@@ -18,8 +19,8 @@ include("Inclusions/Common.inc.php");
         <input type="submit" value="Navigation" name="page" />
     </form>
     
-    </form action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Recettes Favorites">
-        <input type="submit" value="Recettes Favorites" name="page"/>
+    <form action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Recettes Favorites">
+        <input type="submit" value="Recettes Favorites" name="page" />
     </form>
 
     <form  action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Recherche">
@@ -52,7 +53,6 @@ else {
     include("Inclusions/DetailCocktail.inc.php");
 }
 ?>
-
 
 <footer>
     <i> Made by Comte Quentin, Perin nicolas & Polkowski romain </i>

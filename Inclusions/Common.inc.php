@@ -1,3 +1,23 @@
+<script> 
+
+function favoris_est_clique(objet, recette) { 
+    alert("test");
+    if( $(objet).hasClass('favoris')) {
+        $(objet).removeClass('favoris');
+    }
+    else {
+        $(objet).addClass('favoris');
+    }
+    $.post("Inclusions/AjouterFavoris.inc.php", {recette:recette}, function(res) { // à debugger
+        alert(res);
+	});
+}
+
+
+
+
+
+</script>
 <?php
 
 include("Donnees.inc.php");
@@ -91,7 +111,6 @@ function nom_image_cocktail($cocktail) {
     A DEBUGGER
 */
 function ajouter_favoris($recette) {
-
     $nom_cocktail = nom_du_cocktail($recette["titre"]);
 
     if(!isset($_SESSION["utilisateur"]) || !$_SESSION["utilisateur"]["est_connecte"]) { // si l'utilisateur n'est pas connecte
@@ -151,7 +170,6 @@ function est_favorie($recette) {
     A DEBUGGER
 */
 function afficher_recettes($recettes) {
-    global $Recettes;
     foreach($recettes as $cocktail) {
         $nom_cocktail = nom_du_cocktail($cocktail["titre"]);
         $nom_image = "Photos/".$nom_cocktail.".jpg";
@@ -160,14 +178,14 @@ function afficher_recettes($recettes) {
         if(isset($c))
     ?>
     
-    
-        <a href="<?php echo "index.php?page=".$nom_cocktail; ?>">
             <div class="cocktail-div">
                 <span class="cocktail-header"> 
                     <span> <?php echo $nom_cocktail; ?> </span> 
-                    <span class="<?php if(est_favorie($cocktail)) echo "favoris"; ?>"> Favoris </span> 
+                    <span class="<?php if(est_favorie($cocktail)) echo "favoris"; ?>" onclick="favoris_est_clique(this, '<?php echo $nom_cocktail; ?>' ) "> Favoris </span> 
                 </span>
-                <center> <img class="cocktail-img" src="<?php echo $nom_image; ?>" /> </center> 
+                <a href="<?php echo "index.php?page=".$nom_cocktail; ?>"> 
+                    <center> <img class="cocktail-img" src="<?php echo $nom_image; ?>" /> </center> 
+                </a>
                 <ul>
     <?php
         foreach($cocktail["index"] as $ingredient) {
@@ -180,7 +198,6 @@ function afficher_recettes($recettes) {
     ?>
                 </ul>
             </div>
-        </a>
     <?php
     }
 }
