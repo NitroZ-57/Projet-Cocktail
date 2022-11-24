@@ -14,27 +14,24 @@ session_start();
 </head>
 <?php
 include("Inclusions/Common.inc.php");
-if(!isset($_SESSION["favories"])) 
-    $_SESSION["favories"] = array();
-if(!isset($_SESSION["utilisateur"])) {
-    $_SESSION["utilisateur"] = array();
-    $_SESSION["utilisateur"]["est_connecte"] = false;
-}
-if(!isset($_SESSION["utilisateur"]["favories"])) 
-    $_SESSION["utilisateur"]["favories"] = array();
+
+//print_r($_SESSION["favories"]);
+
+$_SESSION["utilisateur"]["nom"] = "Quentin";
+$_SESSION["utilisateur"]["est_connecte"] = true;
 
 ?>
 <header>
 
-    <form action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Navigation"> 
+    <form action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Navigation" class="header-form"> 
         <input type="submit" value="Navigation" name="page" />
     </form>
     
-    <form action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Recettes Favorites">
+    <form action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Recettes Favorites" class="header-form">
         <input type="submit" value="Recettes Favorites" name="page" />
     </form>
 
-    <form  action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Recherche">
+    <form  action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Recherche" class="header-form">
         Recherche : <input type="text" value="" name="Recherche" />
         <input type="submit" value="Recherche" name="page"/>
     </form>
@@ -47,19 +44,26 @@ if(!isset($_SESSION["utilisateur"]["favories"]))
 
 <?php
 if(!isset($_GET["page"])) {
-    include("Inclusions/Menu.inc.php");
+    $_GET["page"] = "Navigation";
 }
 
-elseif($_GET["page"] === "Navigation") {
+if($_GET["page"] === "Navigation") {
     include("Inclusions/Navigation.inc.php");
 }
 elseif($_GET["page"] === "Recherche") {
     include("Inclusions/Recherches.inc.php");
+    $recettes_recherchees = faire_recherche($_GET["Recherche"]);
+    afficher_recettes($recettes_recherchees);
 }
 elseif($_GET["page"] === "Recettes Favorites") {
     include("Inclusions/RecettesFavorites.inc.php");
 }
-
+elseif($_GET["page"] === "Inscription") {
+    include("Inclusions/Inscription.inc.php");
+}
+elseif($_GET["page"] === "Profil") {
+    include("Inclusions/Profil.inc.php");
+}
 else {
     include("Inclusions/DetailCocktail.inc.php");
 }

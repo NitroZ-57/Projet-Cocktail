@@ -8,14 +8,23 @@ else {
     $(objet).addClass('favoris');
 }
 $.post("Inclusions/AjouterFavoris.inc.php", {recette:recette}, function(res) { // à debugger
-    
+    //alert(res);
 });
 }
 </script>
 <?php
 
 include("Donnees.inc.php");
-$_SERVER["Recettes"] = $Recettes;
+if(!isset($_SESSION["favories"])) 
+    $_SESSION["favories"] = array();
+if(!isset($_SESSION["utilisateur"])) {
+    $_SESSION["utilisateur"] = array();
+    $_SESSION["utilisateur"]["est_connecte"] = false;
+}
+if(!isset($_SESSION["utilisateur"]["favories"])) 
+    $_SESSION["utilisateur"]["favories"] = array();
+
+
 /*
     Retourne une chaine de caractère :
         - Remplace tous les caractères accentués d'une chaine par des caractères non accentués
@@ -162,6 +171,13 @@ function est_favorie($recette) {
     A DEBUGGER
 */
 function afficher_recettes($recettes) {
+    if(empty($recettes)) {
+        ?>
+        <h3> Nous n'avons trouvé aucun cocktail correspondant à votre demande. </h3>
+        <?php
+    }
+    else {
+    
     foreach($recettes as $cocktail) {
         $nom_cocktail = nom_du_cocktail($cocktail["titre"]);
         $nom_image = "Photos/".$nom_cocktail.".jpg";
@@ -196,5 +212,17 @@ function afficher_recettes($recettes) {
 
 <?php
     }
+}
+}
+
+
+/* 
+    Effectue la recherche à partir d'une ligne d'entrée
+    $ligne : la ligne dans l'input 
+    retourne : un tableau de recettes correspondant à la recherche
+
+*/
+function faire_recherche($ligne) {
+    /*todo*/
 }
 ?>
