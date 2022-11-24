@@ -1,22 +1,16 @@
 <script> 
 
 function favoris_est_clique(objet, recette) { 
-    alert("test");
-    if( $(objet).hasClass('favoris')) {
-        $(objet).removeClass('favoris');
-    }
-    else {
-        $(objet).addClass('favoris');
-    }
-    $.post("Inclusions/AjouterFavoris.inc.php", {recette:recette}, function(res) { // à debugger
-        alert(res);
-	});
+if( $(objet).hasClass('favoris')) {
+    $(objet).removeClass('favoris');
 }
-
-
-
-
-
+else {
+    $(objet).addClass('favoris');
+}
+$.post("Inclusions/AjouterFavoris.inc.php", {recette:recette}, function(res) { // à debugger
+    
+});
+}
 </script>
 <?php
 
@@ -113,24 +107,23 @@ function nom_image_cocktail($cocktail) {
 function ajouter_favoris($recette) {
     $nom_cocktail = nom_du_cocktail($recette["titre"]);
 
-    if(!isset($_SESSION["utilisateur"]) || !$_SESSION["utilisateur"]["est_connecte"]) { // si l'utilisateur n'est pas connecte
+    if(!$_SESSION["utilisateur"]["est_connecte"]) { // si l'utilisateur n'est pas connecte
+
         if(isset($_SESSION["favories"][$nom_cocktail])) { // la cle existe deja
             unset($_SESSION["favories"][$nom_cocktail]);
         }
         else {
-            if(!isset($_SESSION["favories"])) 
-                $_SESSION["favories"] = array();
             $_SESSION["favories"][$nom_cocktail] = $recette;
+
         }
     }
     else {
         if(isset($_SESSION["utilisateur"]["favories"])) {
+
             if(isset($_SESSION["utilisateur"]["favories"][$nom_cocktail])) { // la cle existe deja
                 unset($_SESSION["utilisateur"]["favories"][$nom_cocktail]);
             }
             else {
-                if(!isset($_SESSION["utilisateur"]["favories"])) 
-                    $_SESSION["utilisateur"]["favories"] = array();
                 $_SESSION["utilisateur"]["favories"][$nom_cocktail] = $recette;
             }
         } 
@@ -150,8 +143,7 @@ function ajouter_favoris($recette) {
 */
 function est_favorie($recette) {
     $nom_cocktail = nom_du_cocktail($recette["titre"]);
-
-    if(!isset($_SESSION["utilisateur"]) || !$_SESSION["utilisateur"]["est_connecte"]) { // si l'utilisateur n'est pas connecte
+    if(!$_SESSION["utilisateur"]["est_connecte"]) { // si l'utilisateur n'est pas connecte
         return isset($_SESSION["favories"][$nom_cocktail]);
     }
     else {
@@ -177,28 +169,32 @@ function afficher_recettes($recettes) {
             $nom_image = "Photos/cocktail.png";
         if(isset($c))
     ?>
-    
-            <div class="cocktail-div">
-                <span class="cocktail-header"> 
-                    <span> <?php echo $nom_cocktail; ?> </span> 
-                    <span class="<?php if(est_favorie($cocktail)) echo "favoris"; ?>" onclick="favoris_est_clique(this, '<?php echo $nom_cocktail; ?>' ) "> Favoris </span> 
-                </span>
-                <a href="<?php echo "index.php?page=".$nom_cocktail; ?>"> 
-                    <center> <img class="cocktail-img" src="<?php echo $nom_image; ?>" /> </center> 
-                </a>
-                <ul>
-    <?php
-        foreach($cocktail["index"] as $ingredient) {
-    ?>
-                    <li> <?php echo 
-                            $ingredient; 
-                        ?> </li>
-    <?php
-            }       
-    ?>
-                </ul>
-            </div>
-    <?php
+
+
+        <div class="cocktail-div">
+            <span class="cocktail-header"> 
+                <span> <?php echo $nom_cocktail; ?> </span> 
+                <span class="<?php if(est_favorie($cocktail)) echo "favoris"; ?>" onclick="favoris_est_clique(this, '<?php echo $nom_cocktail; ?>' ) "> Favoris </span> 
+            </span>
+            <a href="<?php echo "index.php?page=".$nom_cocktail; ?>"> 
+                <center> <img class="cocktail-img" src="<?php echo $nom_image; ?>" /> </center> 
+            </a>
+            <ul>
+<?php
+    foreach($cocktail["index"] as $ingredient) {
+?>
+                <li> <?php echo 
+                        $ingredient; 
+                    ?> </li>
+<?php
+        }       
+?>
+            </ul>
+        </div>
+
+
+
+<?php
     }
 }
 ?>

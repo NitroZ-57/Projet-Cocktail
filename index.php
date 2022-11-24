@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("Inclusions/Common.inc.php");
+
 ?>
 
 
@@ -12,7 +12,18 @@ include("Inclusions/Common.inc.php");
     <link rel="stylesheet" media="screen" type="text/css" title="style" href="Css/common.css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"> </script>
 </head>
+<?php
+include("Inclusions/Common.inc.php");
+if(!isset($_SESSION["favories"])) 
+    $_SESSION["favories"] = array();
+if(!isset($_SESSION["utilisateur"])) {
+    $_SESSION["utilisateur"] = array();
+    $_SESSION["utilisateur"]["est_connecte"] = false;
+}
+if(!isset($_SESSION["utilisateur"]["favories"])) 
+    $_SESSION["utilisateur"]["favories"] = array();
 
+?>
 <header>
 
     <form action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Navigation"> 
