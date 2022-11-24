@@ -1,10 +1,12 @@
-<form method="post">
+<!--<form method="post">
     <fieldset>
         <input type="text" name="Recherche"/>
         <input type="submit" value="Rechercher" />
     </fieldset>
 </form>
+-->
 <?php
+    /*
     function retourLigne() {//fonction à utiliser dans les blocs php
         ?> <br /><?php
     }
@@ -12,7 +14,7 @@
     function TraitementRecherche($recherche) {
         //ÉLIMINATION DES ESPACES, MOTS COMPOSÉS, MOTS VIDES...
         $finalTab = array();
-        $tab = explode(" ",$_POST['Recherche']); //on convertit la recherche en tableau de mots à traiter en séparant par espaces
+        $tab = explode(" ",$recherche); //on convertit la recherche en tableau de mots à traiter en séparant par espaces
         
         $quote = false; //boolean qui indique si un mot composé a commencé à être parcouru
         $decalage = 0; //decalage que l'on doit effectuer s'il y a un mot invalide
@@ -145,7 +147,6 @@
         }
         return $recettesValides;
     }
-
 include "Donnees.inc.php";
     if(isset($_POST['Recherche'])) {
         $tabRecherche = TraitementRecherche($_POST['Recherche']); //on récupère les aliments de la recherche
@@ -172,8 +173,8 @@ include "Donnees.inc.php";
         $RecettesBlacklist = BlacklisterRecettes($TotalIngredientsNonSouhaites, $Recettes);
         
         $RecettesValides = RecettesResultatRecherche($Recettes, $RecettesBlacklist, $TotalIngredientsSouhaites);
-        array_multisort(array_column($RecettesValides, 'score'), SORT_DESC, $RecettesValides); //tri des recettes TODO
-
+        array_multisort(array_column($RecettesValides, 'score'), SORT_DESC, $RecettesValides); //tri des recettes
+        return $RecettesValides;
         //affichage
         foreach($RecettesValides as $Recette) {
             $nbIngRecette = count($Recette["Cocktail"]["index"]);
@@ -182,4 +183,5 @@ include "Donnees.inc.php";
             retourLigne();
         }
     }
+    */
 ?>

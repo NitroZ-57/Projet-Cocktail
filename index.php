@@ -61,7 +61,7 @@ if($_GET["page"] === "Navigation") {
 elseif($_GET["page"] === "Recherche") {
     include("Inclusions/Recherches.inc.php");
     $recettes_recherchees = faire_recherche($_GET["Recherche"]);
-    afficher_recettes($recettes_recherchees);
+    afficher_recettes_recherchees($recettes_recherchees);
 }
 elseif($_GET["page"] === "Recettes Favorites") {
     include("Inclusions/RecettesFavorites.inc.php");
