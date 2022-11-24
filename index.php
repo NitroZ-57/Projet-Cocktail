@@ -49,6 +49,14 @@ if(!isset($_GET["page"])) {
 
 if($_GET["page"] === "Navigation") {
     include("Inclusions/Navigation.inc.php");
+?>
+    <main>
+        <h3> Liste des Cocktails </h3>
+    <?php
+        afficher_recettes($Recettes);
+    ?>
+    </main>
+<?php
 }
 elseif($_GET["page"] === "Recherche") {
     include("Inclusions/Recherches.inc.php");
