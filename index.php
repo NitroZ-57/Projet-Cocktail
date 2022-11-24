@@ -17,8 +17,8 @@ include("Inclusions/Common.inc.php");
 
 //print_r($_SESSION["favories"]);
 
-$_SESSION["utilisateur"]["nom"] = "Quentin";
-$_SESSION["utilisateur"]["est_connecte"] = true;
+//$_SESSION["utilisateur"]["nom"] = "Quentin";
+//$_SESSION["utilisateur"]["est_connecte"] = true;
 
 ?>
 <header>
