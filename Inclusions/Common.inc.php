@@ -15,6 +15,8 @@ $.post("Inclusions/AjouterFavoris.inc.php", {recette:recette}, function(res) { /
 <?php
 
 include("Donnees.inc.php");
+include("Inclusions/Recherches.inc.php");
+
 if(!isset($_SESSION["favories"])) 
     $_SESSION["favories"] = array();
 if(!isset($_SESSION["utilisateur"])) {
@@ -206,6 +208,11 @@ function afficher_recettes($recettes) {
         }       
 ?>
             </ul>
+            <?php
+                if(isset($cocktail["score"])) {
+                    echo "score de ".number_format($cocktail["score"], 2)." %"; //TODO affichage à paufiner
+                }
+            ?>
         </div>
 
 
@@ -227,52 +234,6 @@ function afficher_recettes($recettes) {
 
 
 //FONCTIONS DE LA PARTIE RECHERCHE
-
-function afficher_recettes_recherchees($recettes) {
-    if(empty($recettes)) {
-        ?>
-        <h3> Nous n'avons trouvé aucun cocktail correspondant à votre demande. </h3>
-        <?php
-    }
-    else {
-    
-    foreach($recettes as $recette) {
-        $nom_cocktail = nom_du_cocktail($recette["Cocktail"]["titre"]);
-        $nom_image = "Photos/".$nom_cocktail.".jpg";
-        if(!file_exists($nom_image)) 
-            $nom_image = "Photos/cocktail.png";
-        if(isset($c))
-    ?>
-
-
-        <div class="cocktail-div">
-            <span class="cocktail-header"> 
-                <span> <?php echo $nom_cocktail; ?> </span> 
-                <span class="<?php if(est_favorie($cocktail)) echo "favoris"; ?>" onclick="favoris_est_clique(this, '<?php echo $nom_cocktail; ?>' ) "> Favoris </span> 
-            </span>
-            <a href="<?php echo "index.php?page=".$nom_cocktail; ?>"> 
-                <center> <img class="cocktail-img" src="<?php echo $nom_image; ?>" /> </center> 
-            </a>
-            <ul>
-<?php
-    foreach($recette["Cocktail"]["index"] as $ingredient) {
-?>
-                <li> <?php echo 
-                        $ingredient; 
-                    ?> </li>
-<?php
-        }
-?>
-            </ul>
-            <?php echo "score de ".number_format($recette["score"], 2)." %"; ?>
-        </div>
-
-
-
-<?php
-    }
-}
-}
 
 function retourLigne() {//fonction à utiliser dans les blocs php
     ?> <br /><?php
@@ -338,19 +299,22 @@ function verifRecherche($tabRecherche, $Hierarchie, &$IngSouhaites, &$IngNonSouh
             $IngInvalides[] = $ingredient;
         }
     }
+    if(empty($IngSouhaites)) { //si l'on a pas de critère de recherche valide
+        if(empty($IngNonSouhaites)) {
+            echo "Problème dans votre requête : recherche impossible";
+        }
+        else {
+            $IngSouhaites[] = "Aliment";
+        }
+    }
 }
 
 function AfficherIngResultat($ingsouhaites, $ingnonsouhaites, $inginvalides) {
-    if(empty($ingnonsouhaites) && empty($ingsouhaites)) { //si l'on a pas de critère de recherche valide
-        echo "Problème dans votre requête : recherche impossible";
-    }
-    else {
-        echo "Liste des aliments souhaités : "; foreach($ingsouhaites as $ingredient) echo $ingredient.", ";
-        retourLigne();
-        echo "Liste des aliments non souhaités : "; foreach($ingnonsouhaites as $ingredient) echo $ingredient.", ";
-        retourLigne();
-        echo "Liste des aliments invalides : "; foreach($inginvalides as $ingredient) echo $ingredient.", "; 
-    }
+    echo "Liste des aliments souhaités : "; foreach($ingsouhaites as $ingredient) echo $ingredient.", ";
+    retourLigne();
+    echo "Liste des aliments non souhaités : "; foreach($ingnonsouhaites as $ingredient) echo $ingredient.", ";
+    retourLigne();
+    echo "Liste des aliments invalides : "; foreach($inginvalides as $ingredient) echo $ingredient.", "; 
 }
 
 function ajoutIngRecherche($Ingredient, $Hierarchie, &$TabTotalIngs) {
@@ -395,13 +359,13 @@ function RecettesResultatRecherche($recettes, $recettesBlacklist, $TotalIngredie
                 if(in_array($aliment, $TotalIngredientsSouhaites)) {
                     $indiceValide = -1; //la recette est par défaut absente des recettes déjà trouvées (-1 -> absente)
                     foreach($recettesValides as $indiceRecette => $RecetteValide) {
-                        if($RecetteValide["Cocktail"] == $recette) { //si la recette en question a déjà été trouvée
+                        if($RecetteValide["titre"] == $recette["titre"]) { //si la recette en question a déjà été trouvée
                             $indiceValide = $indiceRecette;
                         }
                     }
                     
                     if($indiceValide == -1) { //si c'est la première fois qu'on trouve la recette
-                        $recettesValides[$indiceRecettesValides]["Cocktail"] = $recette; //on ajoute la recette à la liste de résultats
+                        $recettesValides[$indiceRecettesValides] = $recette; //on ajoute la recette à la liste de résultats
                         $recettesValides[$indiceRecettesValides]["score"] = 1/$nbAliments*100; //on initialise à 1
                         $indiceRecettesValides++;
                     }
@@ -456,9 +420,9 @@ function faire_recherche($ligne) {
         return $RecettesValides;
         //affichage
         foreach($RecettesValides as $Recette) {
-            $nbIngRecette = count($Recette["Cocktail"]["index"]);
+            $nbIngRecette = count($Recette["index"]);
             echo number_format($Recette["score"], 2)."% de satisfaction 
-            <----- ".$Recette["Cocktail"]["titre"];
+            <----- ".$Recette["titre"];
             retourLigne();
         }
     }
