@@ -38,7 +38,7 @@ include("Inclusions/Common.inc.php");
 <?php
         include("Inclusions/ZoneConnexion.inc.php");
 ?>
-
+     
 
 </header>
 
@@ -59,9 +59,15 @@ if($_GET["page"] === "Navigation") {
 <?php
 }
 elseif($_GET["page"] === "Recherche") {
-    include("Inclusions/Recherches.inc.php");
     $recettes_recherchees = faire_recherche($_GET["Recherche"]);
+?>
+    <main> 
+        <h3> Liste des Cocktails </h3>
+<?php
     afficher_recettes_recherchees($recettes_recherchees);
+?> 
+    </main>
+<?php
 }
 elseif($_GET["page"] === "Recettes Favorites") {
     include("Inclusions/RecettesFavorites.inc.php");

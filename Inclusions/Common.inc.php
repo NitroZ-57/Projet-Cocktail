@@ -15,6 +15,8 @@ $.post("Inclusions/AjouterFavoris.inc.php", {recette:recette}, function(res) { /
 <?php
 
 include("Donnees.inc.php");
+include("Inclusions/Recherches.inc.php");
+
 if(!isset($_SESSION["favories"])) 
     $_SESSION["favories"] = array();
 if(!isset($_SESSION["utilisateur"])) {
