@@ -49,11 +49,19 @@ if(!isset($_GET["page"])) {
 
 if($_GET["page"] === "Navigation") {
     include("Inclusions/Navigation.inc.php");
+    if(isset($alimentCourant)) {
+        $TabIngredients = array();
+        ajoutIngRecherche($alimentCourant, $Hierarchie, $TabIngredients);
+        $recettesNav = RecettesResultatRecherche($Recettes, array(), $TabIngredients);
+    }
+    else {
+        $recettesNav = $Recettes;
+    }
 ?>
     <main>
         <h3> Liste des Cocktails </h3>
     <?php
-        afficher_recettes($Recettes);
+        afficher_recettes($recettesNav);
     ?>
     </main>
 <?php
@@ -84,6 +92,6 @@ else {
 ?>
 
 <footer>
-    <i> Made by Comte Quentin, Perin nicolas & Polkowski romain </i>
+    <i> Made by Comte Quentin, Perin Nicolas & Polkowski Romain </i>
 </footer>
 </html>

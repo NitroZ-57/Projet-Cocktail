@@ -348,7 +348,7 @@ function BlacklisterRecettes($ingredients, $recettes) {
     return $RecettesBlacklist;
 }
 
-//procédure qui ajoute la recette si elle contient ingredient dans le tableau recettesValides
+//procédure qui ajoute la recette si elle contient un des ingrédients de TotalIngredientsSouhaites dans le tableau recettesValides
 function RecettesResultatRecherche($recettes, $recettesBlacklist, $TotalIngredientsSouhaites) {
     $recettesValides = array();
     $indiceRecettesValides = 0;
