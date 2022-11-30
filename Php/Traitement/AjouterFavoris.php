@@ -1,7 +1,7 @@
 <?php
-// à debugger
+
 session_start();
-include("Common.inc.php");
+include("../Common.inc.php");
 foreach($Recettes as $recette) {
     if(nom_du_cocktail($recette["titre"]) === nom_du_cocktail($_POST["recette"])) {
         echo $recette["titre"];

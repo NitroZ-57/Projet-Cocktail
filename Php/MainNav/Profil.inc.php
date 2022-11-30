@@ -1,0 +1,5 @@
+<main>
+
+<!-- AFFICHER ICI LES INFORMATIONS DU PROFIL DE L'UTILISATEUR -->
+
+</main>

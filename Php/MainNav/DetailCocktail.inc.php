@@ -17,7 +17,7 @@ foreach($Recettes as $cocktails) {
     }
 }
 
-if(empty($cocktail)) { // le cokctail est invalide
+if(empty($cocktail)) { // le cokctail est invalide on revient au menu
     header('Location: index.php');
     exit();
 }

@@ -1,0 +1,5 @@
+<main>
+
+<!-- FORMULAIRE D'INSCRIPTION NOUVEL UTILISATEUR -->
+
+</main>

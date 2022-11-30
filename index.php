@@ -1,90 +1,53 @@
-<?php
-session_start();
-
-?>
+<?php session_start(); ?>
 
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title> Gestion de Cocktails </title>
     <meta charset="UTF-8" />
     <link rel="stylesheet" media="screen" type="text/css" title="style" href="Css/common.css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"> </script>
 </head>
-<?php
-include("Inclusions/Common.inc.php");
 
-//print_r($_SESSION["favories"]);
-
-//$_SESSION["utilisateur"]["nom"] = "Quentin";
-//$_SESSION["utilisateur"]["est_connecte"] = true;
-
+<?php /* INCLUSION DES TRAITEMENTS */
+include("Php/Common.inc.php");
+include("Php/Traitement/traitementInscription.php");
+include("Php/Traitement/traitementLogin.php");
+include("Php/Traitement/traitementRecherche.php");
 ?>
-<header>
 
-    <form action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Navigation" class="header-form"> 
-        <input type="submit" value="Navigation" name="page" />
-    </form>
-    
-    <form action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Recettes Favorites" class="header-form">
-        <input type="submit" value="Recettes Favorites" name="page" />
-    </form>
+<body>
 
-    <form  action="<?php $_SERVER['PHP_SELF'] ?>" method="get" name="Recherche" class="header-form">
-        Recherche : <input type="text" value="" name="Recherche" />
-        <input type="submit" value="Recherche" name="page"/>
-    </form>
-<?php
-        include("Inclusions/ZoneConnexion.inc.php");
-?>
-     
+    <header>
+    <?php
+        include("Php/Header/headerNavigation.inc.php");
+        include("Php/Header/headerRecettesFavorites.inc.php");
+        include("Php/Header/headerRecherche.inc.php");
+        include("Php/Header/headerZoneConnexion.inc.php");
+    ?>
+    </header>
 
-</header>
 
 <?php
 if(!isset($_GET["page"])) {
     $_GET["page"] = "Navigation";
 }
-
 if($_GET["page"] === "Navigation") {
-    include("Inclusions/Navigation.inc.php");
-    if(isset($alimentCourant)) {
-        $TabIngredients = array();
-        ajoutIngRecherche($alimentCourant, $Hierarchie, $TabIngredients);
-        $recettesNav = RecettesResultatRecherche($Recettes, array(), $TabIngredients);
-    }
-    else {
-        $recettesNav = $Recettes;
-    }
-?>
-    <main>
-        <h3> Liste des Cocktails </h3>
-    <?php
-        afficher_recettes($recettesNav);
-    ?>
-    </main>
-<?php
+    include("Php/MainNav/Navigation.inc.php");
 }
 elseif($_GET["page"] === "Recherche") {
-    $recettes_recherchees = faire_recherche($_GET["Recherche"]);
-?>
-    <main> 
-        <h3> Liste des Cocktails </h3>
-<?php
-    afficher_recettes($recettes_recherchees);
-?> 
-    </main>
-<?php
+    include("Php/MainNav/Recherche.inc.php");
 }
 elseif($_GET["page"] === "Recettes Favorites") {
-    include("Inclusions/RecettesFavorites.inc.php");
+    include("Php/MainNav/RecettesFavorites.inc.php");
 }
 elseif($_GET["page"] === "Inscription") {
-    include("Inclusions/Inscription.inc.php");
+    include("Php/MainNav/Inscription.inc.php");
 }
 elseif($_GET["page"] === "Profil") {
-    include("Inclusions/Profil.inc.php");
+    include("Php/MainNav/Profil.inc.php");
 }
 else {
     include("Inclusions/DetailCocktail.inc.php");
@@ -94,4 +57,7 @@ else {
 <footer>
     <i> Made by Comte Quentin, Perin Nicolas & Polkowski Romain </i>
 </footer>
+
+</body>
+
 </html>

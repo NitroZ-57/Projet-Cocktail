@@ -54,3 +54,19 @@
     ?>
     </ul>
 </nav>
+<?php
+if(isset($alimentCourant)) {
+        $TabIngredients = array();
+        ajoutIngRecherche($alimentCourant, $Hierarchie, $TabIngredients);
+        $recettesNav = RecettesResultatRecherche($Recettes, array(), $TabIngredients);
+    }
+    else {
+        $recettesNav = $Recettes;
+    }
+?>
+    <main>
+        <h3> Liste des Cocktails </h3>
+    <?php
+        afficher_recettes($recettesNav);
+    ?>
+    </main>
