@@ -37,10 +37,10 @@ if(!isset($_GET["page"])) {
 if($_GET["page"] === "Navigation") {
     include("Php/MainNav/Navigation.inc.php");
 }
-elseif($_GET["page"] === "Recherche") {
+elseif($_GET["page"] === "🔎") {
     include("Php/MainNav/Recherche.inc.php");
 }
-elseif($_GET["page"] === "Recettes Favorites") {
+elseif($_GET["page"] === "Recettes ❤️") {
     include("Php/MainNav/RecettesFavorites.inc.php");
 }
 elseif($_GET["page"] === "Inscription") {

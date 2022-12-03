@@ -1,11 +1,11 @@
 <script> 
 
 function favoris_est_clique(objet, recette) { 
-if( $(objet).attr('src').localeCompare('Photos/coeur.png') == 1 ) {
-    $(objet).attr('src', 'Photos/coeur.png');
+if( $(objet).attr('src').localeCompare('img/coeur.png') == 1 ) {
+    $(objet).attr('src', 'img/coeur.png');
 }
 else {
-    $(objet).attr('src', 'Photos/coeurVide.png');
+    $(objet).attr('src', 'img/coeurVide.png');
 }
 $.post("Php/Traitement/AjouterFavoris.php", {recette:recette}, function(res) { // à debugger
     //alert(res);
@@ -192,13 +192,16 @@ function afficher_recettes($recettes, $detail) {
                 <a href="<?php echo "index.php?page=".$nom_cocktail; ?>" title="cliquer pour plus de details"> 
                     <span> <?php echo $nom_cocktail; ?> </span> 
                 </a>
-                <img src="<?php if(est_favorie($cocktail)) echo "Photos/coeur.png"; else echo "Photos/coeurVide.png"?>" onclick="favoris_est_clique(this, '<?php echo $nom_cocktail; ?>' ) " class="coeur" title="favoris"/>  
+                <img src="<?php if(est_favorie($cocktail)) echo "img/coeur.png"; else echo "img/coeurVide.png"?>" onclick="favoris_est_clique(this, '<?php echo $nom_cocktail; ?>' ) " class="icon" title="favoris"/>  
             </span>
             <center> <img class="cocktail-img" src="<?php echo $nom_image; ?>" /> </center> 
             
 <?php
     ?> 
         <h4> Ingrédients </h4>
+        <?php
+        if(!$detail) {
+        ?>
         <ul> 
 <?php
     foreach($cocktail["index"] as $ingredient) {
@@ -212,9 +215,10 @@ function afficher_recettes($recettes, $detail) {
         </ul>
         <?php
     
-
-    if($detail) {
+        }
+        else {
         ?>
+            <span> <?php echo $cocktail["ingredients"]; ?> </span> <?php /* affichage mieux à faire */ ?>
         <h4> Préparation </h4>
             <span> <?php echo $cocktail["preparation"]; ?> </span> 
         <?php
