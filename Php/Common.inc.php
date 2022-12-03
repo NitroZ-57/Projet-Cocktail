@@ -107,6 +107,22 @@ function nom_image_cocktail($cocktail) {
         return false;
 }
 
+
+
+/*
+    Retourne le cocktail entier associé à un nom à rallonge (ceux donné dans les index de $Recette dans Donnees.inc.php)
+    Retourne faux si rien n'a été trouvé
+*/
+function recuperer_cocktail_avec_nom($Recettes, $nom) {
+    foreach($Recettes as $recette) {
+        if(remplace_car_accentues_et_maj($recette["titre"]) === remplace_car_accentues_et_maj($nom)) {
+            return $recette;
+        }
+    }
+    return false;
+}
+
+
 /*
     Ajoute une recette aux favoris ou l'enleve si elle existe deja 
     Prends en compte si l'utilisateur est connecté ou non (si $_SESSION["utilisateur"]["est_connecte"] est vrai ou non )
@@ -181,8 +197,8 @@ function afficher_recettes($recettes, $detail) {
     else {
     
     foreach($recettes as $cocktail) {
-        $nom_cocktail = nom_du_cocktail($cocktail["titre"]);
-        $nom_image = nom_image_cocktail($nom_cocktail);
+        $nom_cocktail = $cocktail["titre"];
+        $nom_image = nom_image_cocktail(nom_du_cocktail($nom_cocktail));
         if(isset($c))
     ?>
 
@@ -190,7 +206,7 @@ function afficher_recettes($recettes, $detail) {
         <div class="cocktail-div">
             <span class="cocktail-header"> 
                 <a href="<?php echo "index.php?page=".$nom_cocktail; ?>" title="cliquer pour plus de details"> 
-                    <span> <?php echo $nom_cocktail; ?> </span> 
+                    <span> <?php echo nom_du_cocktail($nom_cocktail); ?> </span> 
                 </a>
                 <img src="<?php if(est_favorie($cocktail)) echo "img/coeur.png"; else echo "img/coeurVide.png"?>" onclick="favoris_est_clique(this, '<?php echo $nom_cocktail; ?>' ) " class="icon" title="favoris"/>  
             </span>
