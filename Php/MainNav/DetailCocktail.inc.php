@@ -30,14 +30,14 @@ if(empty($cocktail)) { // le cokctail est invalide on revient au menu
 
 
 <main>
-<pre>
 <?php
-print_r($cocktail); // TODO BETTER
+//print_r($cocktail); // TODO BETTER
+$recette = array();
+$recette[0] = $cocktail;
+afficher_recettes($recette, true);
 $nom_cocktail = nom_du_cocktail($cocktail["titre"]);
 $nom_image = "Photos/".$nom_cocktail.".jpg";
 if(!file_exists($nom_image)) 
     $nom_image = "Photos/cocktail.png";
 ?>
-<img class="cocktail-img"  src="<?php echo $nom_image; ?>" />
-</pre>
 </main>

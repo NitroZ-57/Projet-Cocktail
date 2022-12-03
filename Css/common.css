@@ -20,9 +20,10 @@ main {
     width: 60%;
 }
 
-.favoris {
-    background-color: red;
+.coeur {
+    width: 40px;
 }
+
 .cocktail-img {
     width: 100px;
     margin: 3px;

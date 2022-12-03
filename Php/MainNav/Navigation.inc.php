@@ -67,6 +67,6 @@ if(isset($alimentCourant)) {
     <main>
         <h3> Liste des Cocktails </h3>
     <?php
-        afficher_recettes($recettesNav);
+        afficher_recettes($recettesNav, false);
     ?>
     </main>

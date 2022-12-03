@@ -50,7 +50,7 @@ elseif($_GET["page"] === "Profil") {
     include("Php/MainNav/Profil.inc.php");
 }
 else {
-    include("Inclusions/DetailCocktail.inc.php");
+    include("Php/MainNav/DetailCocktail.inc.php");
 }
 ?>
 

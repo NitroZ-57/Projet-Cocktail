@@ -1,11 +1,11 @@
 <script> 
 
 function favoris_est_clique(objet, recette) { 
-if( $(objet).hasClass('favoris')) {
-    $(objet).removeClass('favoris');
+if( $(objet).attr('src').localeCompare('Photos/coeur.png') == 1 ) {
+    $(objet).attr('src', 'Photos/coeur.png');
 }
 else {
-    $(objet).addClass('favoris');
+    $(objet).attr('src', 'Photos/coeurVide.png');
 }
 $.post("Php/Traitement/AjouterFavoris.php", {recette:recette}, function(res) { // à debugger
     //alert(res);
@@ -46,6 +46,7 @@ function remplace_car_accentues_et_maj($chaine) {
         'ù' => 'u',
         'û' => 'u',
         'ü' => 'u',
+        'ñ' => 'n',
         'A' => 'a',
         'B' => 'b',
         'C' => 'c',
@@ -96,8 +97,7 @@ function nom_du_cocktail($cocktail) {
 */
 function nom_image_cocktail($cocktail) {
     if(preg_match('#(^[^\(]*)#i', $cocktail, $regs)) {
-        $nom_image = "Photos/".str_replace(' ', '_',trim($regs[1])).".jpg";
-        return $nom_image;
+        $nom_image = remplace_car_accentues_et_maj("Photos/".str_replace(' ', '_',trim($regs[1])).".jpg");
         if(file_exists($nom_image))
             return $nom_image;
         else 
@@ -172,7 +172,7 @@ function est_favorie($recette) {
 
     A DEBUGGER
 */
-function afficher_recettes($recettes) {
+function afficher_recettes($recettes, $detail) {
     if(empty($recettes)) {
         ?>
         <h3> Nous n'avons trouvé aucun cocktail correspondant à votre demande. </h3>
@@ -182,36 +182,47 @@ function afficher_recettes($recettes) {
     
     foreach($recettes as $cocktail) {
         $nom_cocktail = nom_du_cocktail($cocktail["titre"]);
-        $nom_image = "Photos/".$nom_cocktail.".jpg";
-        if(!file_exists($nom_image)) 
-            $nom_image = "Photos/cocktail.png";
+        $nom_image = nom_image_cocktail($nom_cocktail);
         if(isset($c))
     ?>
 
 
         <div class="cocktail-div">
             <span class="cocktail-header"> 
-                <span> <?php echo $nom_cocktail; ?> </span> 
-                <span class="<?php if(est_favorie($cocktail)) echo "favoris"; ?>" onclick="favoris_est_clique(this, '<?php echo $nom_cocktail; ?>' ) "> Favoris </span> 
+                <a href="<?php echo "index.php?page=".$nom_cocktail; ?>" title="cliquer pour plus de details"> 
+                    <span> <?php echo $nom_cocktail; ?> </span> 
+                </a>
+                <img src="<?php if(est_favorie($cocktail)) echo "Photos/coeur.png"; else echo "Photos/coeurVide.png"?>" onclick="favoris_est_clique(this, '<?php echo $nom_cocktail; ?>' ) " class="coeur" title="favoris"/>  
             </span>
-            <a href="<?php echo "index.php?page=".$nom_cocktail; ?>"> 
-                <center> <img class="cocktail-img" src="<?php echo $nom_image; ?>" /> </center> 
-            </a>
-            <ul>
+            <center> <img class="cocktail-img" src="<?php echo $nom_image; ?>" /> </center> 
+            
+<?php
+    ?> 
+        <h4> Ingrédients </h4>
+        <ul> 
 <?php
     foreach($cocktail["index"] as $ingredient) {
 ?>
-                <li> <?php echo 
-                        $ingredient; 
-                    ?> </li>
+            <li> <?php echo 
+                    $ingredient; 
+                ?> </li>
 <?php
         }       
 ?>
-            </ul>
-            <?php
+        </ul>
+        <?php
+    
+
+    if($detail) {
+        ?>
+        <h4> Préparation </h4>
+            <span> <?php echo $cocktail["preparation"]; ?> </span> 
+        <?php
+}
                 if(isset($cocktail["score"])) {
                     echo "score de ".number_format($cocktail["score"], 2)." %"; //TODO affichage à paufiner
                 }
+
             ?>
         </div>
 
