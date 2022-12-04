@@ -253,5 +253,28 @@ function afficher_recettes($recettes, $detail) {
 }
 }
 
+/*
+    Vérifie si le login passé en paramètre a une syntaxe correcte
+*/
+function verification_login($login){
+    if (isset($_SESSION['utilisateur'])){
+        foreach($_SESSION['utilisateur'] as $util)
+        {
+            if ($util == $login) return "login déjà utilisé, veuillez en saisir un autre";
+        }
+    }
+    if (!(preg_match('/^[a-zA-Z0-9]+$/', $login))) return "erreur de syntaxe : le login doit uniquement être constitué de lettres non accentuées minusclues ou majuscules et/ou de chiffres";
+    else return "ok";
+}
+
+/*
+    Vérifie si le nom ou le prénom passé en paramètre a une syntaxe correcte
+*/
+function verification_nom_prenom($nom){
+    if (!(preg_match("/^([\p{L}a-zA-Z]+\s*|[\p{L}a-zA-Z]*|([\p{L}a-zA-Z]+-[\p{L}a-zA-Z]+)|([\p{L}a-zA-Z]+'[\p{L}a-zA-Z]+))+$/u", $nom))) return "erreur de syntaxe : le nom/prénom doit être constitué de lettres majuscules ou minuscules, d'espaces et/ou de tirets ou apostrophes encadrés de deux lettres";
+    else return "ok";
+}
+
+?>
 
 
