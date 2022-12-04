@@ -3,7 +3,7 @@
 //laisser les traitements en haut pour faciliter le rafraichissement de la page
 if (isset($_POST['page'])){
     if($_POST['page'] === "Se Connecter") {
-    @$sortie =  connexion_utilisateur($_POST['login'], $_POST['mot_de_passe']);
+    @$sortie =  connexion_utilisateur($_POST['login'], $_POST['mot_de_passe'], $Recettes);
     echo $sortie;
     $_GET['page'] = "Navigation";
     }

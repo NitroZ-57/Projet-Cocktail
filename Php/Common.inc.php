@@ -133,7 +133,6 @@ function recuperer_cocktail_avec_nom($Recettes, $nom) {
 */
 function ajouter_favoris($recette) {
     $nom_cocktail = nom_du_cocktail($recette["titre"]);
-
     if(!$_SESSION["utilisateur"]["est_connecte"]) { // si l'utilisateur n'est pas connecte
 
         if(isset($_SESSION["favories"][$nom_cocktail])) { // la cle existe deja

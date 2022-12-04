@@ -25,7 +25,7 @@ $_SESSION["utilisateur"] :
 */
 //include("../Common.inc.php");
 
-function connexion_utilisateur($login, $mdp){
+function connexion_utilisateur($login, $mdp, $Recettes){
     $path = __DIR__ ."\\utils\\".$login.".txt";
 
     $file = fopen($path, 'r');
@@ -68,7 +68,7 @@ function connexion_utilisateur($login, $mdp){
     
     foreach($tempfav as $nom_fav){
 
-        $recette = recuperer_cocktail_avec_nom($Recettes, $nom_fav)
+        $recette = recuperer_cocktail_avec_nom($Recettes, $nom_fav);
 
         $nom_cocktail = nom_du_cocktail($recette["titre"]);
 
@@ -81,6 +81,7 @@ function connexion_utilisateur($login, $mdp){
 
             if(!isset($_SESSION["utilisateur"]["favories"][$nom_cocktail])) { // la cle existe deja
                 $_SESSION["utilisateur"]["favories"][$nom_cocktail] = $fav;
+                //ajouter_favoris($fav); // ça doit aussi marcher normalement
             }
             
     }
