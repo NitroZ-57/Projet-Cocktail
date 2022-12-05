@@ -25,6 +25,10 @@ $_SESSION["utilisateur"] :
 */
 //include("../Common.inc.php");
 
+/*
+    Connecte l'utilisateur si le login est enregistré et le mot de passe correspond
+    Met à jour les variables de session et transfère les favoris sélectionnés avant la connexion s'il ne sont pas déjà présents dans les favoris de l'utilisateur en question
+*/
 function connexion_utilisateur($login, $mdp, $Recettes){
     //$path = __DIR__ ."\\utils\\".$login.".txt";
 
@@ -52,7 +56,7 @@ function connexion_utilisateur($login, $mdp, $Recettes){
 
     fgets($file); //pour décaler à la ligne suivante
     $prenom = fgets($file);
-    $_SESSION['utilisateur']['prenom'] = trim(substr($prenom, strpos($prenom, ':')) + 2);
+    $_SESSION['utilisateur']['prenom'] = trim(substr($prenom, strpos($prenom, ':') + 2));
 
     fgets($file); //pour décaler à la ligne suivante
     $sexe = fgets($file);
@@ -94,6 +98,10 @@ function connexion_utilisateur($login, $mdp, $Recettes){
     
 }
 
+/*
+    Déconnecte l'utilisateur actuel en enregistrant ce qu'il a fait comme modification dans ses favoris ou son profil pendant la session
+    Remet les variables de session à zéro
+*/
 function deconnexion_utilisateur(){
 
     $tempfav = array();

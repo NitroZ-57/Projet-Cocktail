@@ -5,6 +5,11 @@ if (isset($_POST['inscription'])){
     echo $sortie;
 }
 
+/* 
+    Crée un utilisateur avec les arguments passés en paramètres, en vérifiant si le login et le nom/prénom sont conformes au format et la syntaxe attendus
+    Crée un fichier associé à l'utilisateur, y enregistre les données et initialise les variables de session de l'utilisateur
+    Transfère également les favoris sélectionnés lorsque l'utilisateur n'était pas connecté vers ses favoris personnels
+*/
 function creation_utilisateur($login, $mdp, $nom, $prenom, $sexe, $naissance){
     
     $loginverif = verification_login($login);
