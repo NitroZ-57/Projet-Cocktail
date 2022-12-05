@@ -1,5 +1,7 @@
 <?php
 
+include("Php\Donnees.inc.php");
+
 //laisser les traitements en haut pour faciliter le rafraichissement de la page
 if (isset($_POST['page'])){
     if($_POST['page'] === "Se Connecter") {

@@ -15,20 +15,20 @@ function creation_utilisateur($login, $mdp, $nom, $prenom, $sexe, $naissance){
     if (!($nomverif == "ok")) return $nomverif;
     if (!($prenomverif == "ok")) return $prenomverif;
 
-    $path = __DIR__ ."\\utils\\".$login.".txt";
+    //$path = __DIR__ ."\\utils\\".$login.".txt";
+
+    $path = realpath("Sauvegardes\\");
+    $path = $path."\\".$login.".txt";
 
     $file = fopen($path, 'w');
 
     if ($file === false ) return "erreur lors de l'ouverture du fichier de sauvegarde : ".$file; //gestion erreurs ?
-
-    $sess = session_id();
 
     $mdp = password_hash($mdp, PASSWORD_DEFAULT);
 
     fprintf($file, 
     "login : %s\n
 mot de passe haché : %s\n
-id de session : %s\n
 nom : %s\n
 prénom : %s\n
 sexe : %s\n
@@ -49,13 +49,16 @@ date de naissance : %s\n\n", $login, $mdp, $sess, $nom, $prenom, $sexe, $naissan
 
     $_SESSION["utilisateur"]['naissance'] = $naissance;
 
+    $_SESSION["utilisateur"]['hash'] = $mdp;
+
     foreach($_SESSION['favories'] as $fav){
 
-        $nom_cocktail = nom_du_cocktail($recette["titre"]);
+        //$recette = recuperer_cocktail_avec_nom($Recettes, $fav['titre']);
+/*
+        $nom_cocktail = nom_du_cocktail($fav);
 
-        if(!isset($_SESSION["utilisateur"]["favories"][$nom_cocktail])) { // la cle existe deja
-            $_SESSION["utilisateur"]["favories"][$nom_cocktail] = $fav;
-        }
+        $_SESSION["utilisateur"]["favories"][$nom_cocktail] = $fav;*/
+        ajouter_favoris($fav);
         
 }
 

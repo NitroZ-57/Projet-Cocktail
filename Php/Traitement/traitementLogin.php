@@ -26,7 +26,10 @@ $_SESSION["utilisateur"] :
 //include("../Common.inc.php");
 
 function connexion_utilisateur($login, $mdp, $Recettes){
-    $path = __DIR__ ."\\utils\\".$login.".txt";
+    //$path = __DIR__ ."\\utils\\".$login.".txt";
+
+    $path = realpath("Sauvegardes\\");
+    $path = $path."\\".$login.".txt";
 
     $file = fopen($path, 'r');
     if ($file === false) return "le login est incorrect ou l'utilisateur n'existe pas";
@@ -36,6 +39,8 @@ function connexion_utilisateur($login, $mdp, $Recettes){
 
     $hashed_mdp = fgets($file);
     $hashed_mdp = trim(substr($hashed_mdp, strpos($hashed_mdp, ':') + 2));
+    
+    $_SESSION["utilisateur"]['hash'] = $hashed_mdp;
 
     if (password_verify($mdp, $hashed_mdp) != true) return "mot de passe incorrect";
 
@@ -58,6 +63,7 @@ function connexion_utilisateur($login, $mdp, $Recettes){
     $_SESSION['utilisateur']['naissance'] = trim(substr($naissance, strpos($naissance, ':') + 2));
 
     $_SESSION['utilisateur']['est_connecte'] = true;
+
 
     fgets($file); //pour décaler à la ligne suivante
 
@@ -93,12 +99,28 @@ function deconnexion_utilisateur(){
     $tempfav = array();
 
     foreach($_SESSION["utilisateur"]['favories'] as $fav){
-        array_push($tempfav, $fav);
+        array_push($tempfav, $fav['titre']);
     }
 
-    $path = __DIR__ ."\\utils\\".$_SESSION["utilisateur"]['login'].".txt";
+    //$path = __DIR__ ."\\utils\\".$_SESSION["utilisateur"]['login'].".txt";
 
-    file_put_contents($path, serialize($tempfav));
+    $path = realpath("Sauvegardes\\");
+    $path = $path."\\".$_SESSION["utilisateur"]['login'].".txt";
+
+    $file = fopen($path, 'w');
+
+    fprintf($file, 
+    "login : %s\n
+mot de passe haché : %s\n
+nom : %s\n
+prénom : %s\n
+sexe : %s\n
+date de naissance : %s\n\n", $_SESSION["utilisateur"]['login'], $_SESSION["utilisateur"]['hash'], $_SESSION["utilisateur"]['nom'], $_SESSION["utilisateur"]['prenom'], $_SESSION["utilisateur"]['sexe'], $_SESSION["utilisateur"]['naissance']);
+//le double \n est intentionnel, pour faciliter la sauvegarde des favoris
+
+    fclose($file);
+
+    file_put_contents($path, serialize($tempfav), FILE_APPEND);
 
     $_SESSION["utilisateur"]["est_connecte"] = false;
 
