@@ -23,21 +23,10 @@ if(empty($cocktail)) { // le cokctail est invalide on revient au menu
 }
 
 // on a trouve le cocktail on peut afficher la page
-
-
 ?>
-
-
-
 <main>
 <?php
-//print_r($cocktail); // TODO BETTER
-$recette = array();
-$recette[0] = $cocktail;
-afficher_recettes($recette, true);
-$nom_cocktail = nom_du_cocktail($cocktail["titre"]);
-$nom_image = "Photos/".$nom_cocktail.".jpg";
-if(!file_exists($nom_image)) 
-    $nom_image = "Photos/cocktail.png";
+$recette = array(0 => $cocktail); // on créer un tableau dans lequel notre cocktail est le seul
+afficher_recettes($recette, true); 
 ?>
 </main>

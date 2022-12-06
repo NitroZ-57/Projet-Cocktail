@@ -1,16 +1,23 @@
 <script> 
 
-function favoris_est_clique(objet, recette) { 
-if( $(objet).attr('src').localeCompare('img/coeur.png') == 1 ) {
+function favoris_est_clique(objet, recette) {  
+if( $(objet).attr('src').localeCompare('img/coeur.png') == 1 ) { // on s'occupe de l'image du coeur 
     $(objet).attr('src', 'img/coeur.png');
 }
 else {
     $(objet).attr('src', 'img/coeurVide.png');
 }
-$.post("Php/Traitement/AjouterFavoris.php", {recette:recette}, function(res) { // à debugger
-    //alert(res);
+$.post("Php/Traitement/AjouterFavoris.php", {recette:recette}, function(res) { // on fait la requete ajax pour ajouter aux favoris en php
+    
 });
 }
+
+// une fonction qui fait une boite de dialogue 
+function boite_alerte(msg) {
+    alert(msg);
+}
+
+
 </script>
 <?php
 

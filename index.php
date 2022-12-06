@@ -11,17 +11,17 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"> </script>
 </head>
 
-<?php /* INCLUSION DES TRAITEMENTS */
+<body>
+    
+<?php // INCLUSION DES TRAITEMENTS
 include("Php/Common.inc.php");
 include("Php/Traitement/traitementInscription.php");
 include("Php/Traitement/traitementLogin.php");
 include("Php/Traitement/traitementRecherche.php");
 ?>
-
-<body>
-
     <header>
     <?php
+        // récupération de toutes les parties d'entête 
         include("Php/Header/headerNavigation.inc.php");
         include("Php/Header/headerRecettesFavorites.inc.php");
         include("Php/Header/headerRecherche.inc.php");
@@ -31,6 +31,7 @@ include("Php/Traitement/traitementRecherche.php");
 
 
 <?php
+// On affiche le bon main en fonction de la page sur laquelle on est
 if(!isset($_GET["page"])) {
     $_GET["page"] = "Navigation";
 }

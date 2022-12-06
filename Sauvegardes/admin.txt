@@ -1,0 +1,13 @@
+login : admin
+
+mot de passe haché : $2y$10$3miZ.by3qMReisxShUMsiOxeTKz65RDUHZwfAex42PBBbJ/uhFime
+
+nom : 
+
+prénom : 
+
+sexe : 
+
+date de naissance : 
+
+a:0:{}

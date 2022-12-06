@@ -2,7 +2,9 @@
 
 if (isset($_POST['inscription'])){
     @$sortie =  creation_utilisateur($_POST['login'], $_POST['mot_de_passe'], $_POST['nom'], $_POST['prenom'], $_POST['sexe'], $_POST['naissance']);
-    echo $sortie;
+    echo "<script> boite_alerte(\"$sortie\"); </script>";
+    $_GET["page"] = "Navigation";
+    unset($_POST["inscription"]);
 }
 
 /* 
@@ -37,7 +39,7 @@ mot de passe haché : %s\n
 nom : %s\n
 prénom : %s\n
 sexe : %s\n
-date de naissance : %s\n\n", $login, $mdp, $sess, $nom, $prenom, $sexe, $naissance);
+date de naissance : %s\n\n", $login, $mdp, $nom, $prenom, $sexe, $naissance);
 //le double \n est intentionnel, pour faciliter la sauvegarde des favoris
 
     fclose($file);
