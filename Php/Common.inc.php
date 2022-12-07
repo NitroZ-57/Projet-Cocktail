@@ -12,11 +12,6 @@ $.post("Php/Traitement/AjouterFavoris.php", {recette:recette}, function(res) { /
 });
 }
 
-// une fonction qui fait une boite de dialogue 
-function boite_alerte(msg) {
-    alert(msg);
-}
-
 
 </script>
 <?php

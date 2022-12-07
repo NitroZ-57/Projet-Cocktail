@@ -131,14 +131,15 @@ date de naissance : %s\n\n", $_SESSION["utilisateur"]['login'], $_SESSION["utili
 
 if (isset($_POST['page']) && $_POST['page'] == "Se Connecter"){
     @$sortie =  connexion_utilisateur($_POST['login'], $_POST['mot_de_passe'], $Recettes);
-    echo "<script> boite_alerte(\"$sortie\"); </script>";
     $_GET['page'] = "Navigation";
+    echo "<script> alert(\"$sortie\"); document.location.href=\"index.php?page=Navigation\"; </script>"; // cette ligne sert à afficher un message dans une boite d'alerte et revenir sur le menu pour ne pas avoir à reconfirmer le formulaire lors d'une actualisation
 }
 
 if (isset($_POST['page']) && $_POST['page'] == "Se Deconnecter"){
     @$sortie =  deconnexion_utilisateur();
-    echo "<script> boite_alerte(\"$sortie\"); </script>";
     $_GET['page'] = "Navigation";
+    echo "<script> alert(\"$sortie\"); document.location.href=\"index.php?page=Navigation\"; </script>"; // cette ligne sert à afficher un message dans une boite d'alerte et revenir sur le menu pour ne pas avoir à reconfirmer le formulaire lors d'une actualisation
+    
 }
 
 

@@ -2,9 +2,8 @@
 
 if (isset($_POST['inscription'])){
     @$sortie =  creation_utilisateur($_POST['login'], $_POST['mot_de_passe'], $_POST['nom'], $_POST['prenom'], $_POST['sexe'], $_POST['naissance']);
-    echo "<script> boite_alerte(\"$sortie\"); </script>";
+    echo "<script> alert(\"$sortie\"); document.location.href=\"index.php?page=Navigation\"; </script>"; // cette ligne sert à afficher un message dans une boite d'alerte et revenir sur le menu pour ne pas avoir à reconfirmer le formulaire lors d'une actualisation
     $_GET["page"] = "Navigation";
-    unset($_POST["inscription"]);
 }
 
 /* 
