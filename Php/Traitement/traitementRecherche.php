@@ -1,7 +1,10 @@
 <?php
 
-function retourLigne() {//fonction à utiliser dans les blocs php
-    ?> <br /><?php
+function debutParagraphe() {//fonction à utiliser dans les blocs php
+    ?> <p><?php
+}
+function finParagraphe() {//fonction à utiliser dans les blocs php
+    ?> </p><?php
 }
 
 function TraitementRecherche($recherche) {
@@ -75,11 +78,21 @@ function verifRecherche($tabRecherche, $Hierarchie, &$IngSouhaites, &$IngNonSouh
 }
 
 function AfficherIngResultat($ingsouhaites, $ingnonsouhaites, $inginvalides) {
-    echo "Liste des aliments souhaités : "; foreach($ingsouhaites as $ingredient) echo $ingredient.", ";
-    retourLigne();
-    echo "Liste des aliments non souhaités : "; foreach($ingnonsouhaites as $ingredient) echo $ingredient.", ";
-    retourLigne();
-    echo "Liste des aliments invalides : "; foreach($inginvalides as $ingredient) echo $ingredient.", "; 
+    if(!empty($ingsouhaites)) {
+        debutParagraphe();
+        echo "Liste des aliments souhaités : "; foreach($ingsouhaites as $ingredient) echo $ingredient.", ";
+        finParagraphe();
+    }
+    if(!empty($ingnonsouhaites)) {
+        debutParagraphe();
+        echo "Liste des aliments non souhaités : "; foreach($ingnonsouhaites as $ingredient) echo $ingredient.", ";
+        finParagraphe();
+    }
+    if(!empty($inginvalides)) {
+        debutParagraphe();
+        echo "Liste des aliments invalides : "; foreach($inginvalides as $ingredient) echo $ingredient.", ";
+        finParagraphe();
+    }
 }
 
 function ajoutIngRecherche($Ingredient, $Hierarchie, &$TabTotalIngs) {
@@ -158,21 +171,15 @@ function faire_recherche($ligne, $Hierarchie, $Recettes) {
     if(isset($ligne)) {
         $tabRecherche = TraitementRecherche($ligne); //on récupère les aliments de la recherche
         
-        //affichage
-        echo "tableau d'elements : "; print_r($tabRecherche);
-        retourLigne();
-        
         $IngSouhaites = array();
         $IngNonSouhaites = array();
         $IngInvalides = array();
 
         verifRecherche($tabRecherche, $Hierarchie, $IngSouhaites, $IngNonSouhaites, $IngInvalides);
 
-        retourLigne();
         //affichage
         AfficherIngResultat($IngSouhaites, $IngNonSouhaites, $IngInvalides);
         
-        retourLigne();
         //TRAITEMENT DES RECETTES
         
         $TotalIngredientsSouhaites = ensIngRecherche($IngSouhaites, $Hierarchie);
@@ -182,13 +189,6 @@ function faire_recherche($ligne, $Hierarchie, $Recettes) {
         $RecettesValides = RecettesResultatRecherche($Recettes, $RecettesBlacklist, $TotalIngredientsSouhaites);
         array_multisort(array_column($RecettesValides, 'score'), SORT_DESC, $RecettesValides); //tri des recettes
         return $RecettesValides;
-        //affichage
-        foreach($RecettesValides as $Recette) {
-            $nbIngRecette = count($Recette["index"]);
-            echo number_format($Recette["score"], 2)."% de satisfaction 
-            <----- ".$Recette["titre"];
-            retourLigne();
-        }
     }
 }
 ?>
