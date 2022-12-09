@@ -22,7 +22,7 @@ function connexion_utilisateur($login, $mdp, $Recettes){
     
     $_SESSION["utilisateur"]['hash'] = $hashed_mdp;
 
-    if (password_verify($mdp, $hashed_mdp) != true) return "mot de passe incorrect";
+    if (md5($mdp, false) !== $hashed_mdp) return "mot de passe incorrect";
 
     $_SESSION['utilisateur']['login'] = $login;
 
@@ -56,14 +56,14 @@ function connexion_utilisateur($login, $mdp, $Recettes){
 
         $recette = recuperer_cocktail_avec_nom($Recettes, $nom_fav);
 
-        $nom_cocktail = nom_du_cocktail($recette["titre"]);
+        $nom_cocktail = $recette["titre"];
 
         $_SESSION["utilisateur"]['favories'][$nom_cocktail] = $recette;
     }
 
     foreach($_SESSION['favories'] as $fav){
 
-            $nom_cocktail = nom_du_cocktail($fav["titre"]);
+            $nom_cocktail = $fav["titre"];
 
             if(!isset($_SESSION["utilisateur"]["favories"][$nom_cocktail])) { // la cle existe deja
                 $_SESSION["utilisateur"]["favories"][$nom_cocktail] = $fav;
@@ -71,6 +71,7 @@ function connexion_utilisateur($login, $mdp, $Recettes){
             }
             
     }
+    $_SESSION["favories"] = array();
     return "connexion réussie";
     
 }
@@ -82,12 +83,12 @@ function connexion_utilisateur($login, $mdp, $Recettes){
 function deconnexion_utilisateur(){
 
     $tempfav = array();
+    $_SESSION["utilisateur"]["est_connecte"] = false;
 
     foreach($_SESSION["utilisateur"]['favories'] as $fav){
-        array_push($tempfav, $fav['titre']);
+        $tempfav[$fav['titre']] = $fav['titre'];
+        ajouter_favoris($fav);
     }
-
-    //$path = __DIR__ ."\\utils\\".$_SESSION["utilisateur"]['login'].".txt";
 
     $path = realpath("Sauvegardes\\");
     $path = $path."\\".$_SESSION["utilisateur"]['login'].".txt";
@@ -107,8 +108,6 @@ date de naissance : %s\n\n", $_SESSION["utilisateur"]['login'], $_SESSION["utili
 
     file_put_contents($path, serialize($tempfav), FILE_APPEND);
 
-    $_SESSION["utilisateur"]["est_connecte"] = false;
-
     $_SESSION["utilisateur"]['login'] = "";
 
     $_SESSION["utilisateur"]['nom'] = "";
@@ -118,10 +117,6 @@ date de naissance : %s\n\n", $_SESSION["utilisateur"]['login'], $_SESSION["utili
     $_SESSION["utilisateur"]['sexe'] = "";
 
     $_SESSION["utilisateur"]['naissance'] = "";
-
-    $_SESSION["utilisateur"]['favories'] = array();
-
-    $_SESSION['favories'] = array();
 
     return "deconnexion réussie";
 
@@ -138,8 +133,7 @@ if (isset($_POST['page']) && $_POST['page'] == "Se Connecter"){
 if (isset($_POST['page']) && $_POST['page'] == "Se Deconnecter"){
     @$sortie =  deconnexion_utilisateur();
     $_GET['page'] = "Navigation";
-    echo "<script> alert(\"$sortie\"); document.location.href=\"index.php?page=Navigation\"; </script>"; // cette ligne sert à afficher un message dans une boite d'alerte et revenir sur le menu pour ne pas avoir à reconfirmer le formulaire lors d'une actualisation
-    
+    echo "<script> alert(\"$sortie\"); document.location.href=\"index.php?page=Navigation\"; </script>"; // cette ligne sert à afficher un message dans une boite d'alerte et revenir sur le menu pour ne pas avoir à reconfirmer le formulaire lors d'une actualisation   
 }
 
 

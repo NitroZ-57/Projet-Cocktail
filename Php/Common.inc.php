@@ -134,12 +134,13 @@ function recuperer_cocktail_avec_nom($Recettes, $nom) {
     A DEBUGGER
 */
 function ajouter_favoris($recette) {
-    $nom_cocktail = nom_du_cocktail($recette["titre"]);
+    $nom_cocktail = $recette["titre"];
     if(!$_SESSION["utilisateur"]["est_connecte"]) { // si l'utilisateur n'est pas connecte
 
         if(isset($_SESSION["favories"][$nom_cocktail])) { // la cle existe deja
-            unset($_SESSION["favories"][$nom_cocktail]);
+            unset($_SESSION["favories"][$nom_cocktail]);echo "<script> alert('$nom_cocktail'); </script>";
         }
+        
         else {
             $_SESSION["favories"][$nom_cocktail] = $recette;
 
@@ -170,7 +171,7 @@ function ajouter_favoris($recette) {
     A DEBUGGER
 */
 function est_favorie($recette) {
-    $nom_cocktail = nom_du_cocktail($recette["titre"]);
+    $nom_cocktail = $recette["titre"];
     if(!$_SESSION["utilisateur"]["est_connecte"]) { // si l'utilisateur n'est pas connecte
         return isset($_SESSION["favories"][$nom_cocktail]);
     }
@@ -246,13 +247,11 @@ function afficher_recettes($recettes, $detail) {
 
             ?>
         </div>
-
-
-
 <?php
     }
 }
 }
+
 
 /*
     Vérifie si le login passé en paramètre a une syntaxe correcte
@@ -276,62 +275,7 @@ function verification_nom_prenom($nom){
     else return "ok";
 }
 
-/*
-    Modifie le mot de passe de l'utilisateur et le hashe bien sûr
-*/
-function modifier_mdp($mdp){
-    $mdp = password_hash($mdp, PASSWORD_DEFAULT);
-    $_SESSION["utilisateur"]['hash'] = $mdp;
-    return "Mot de passe changé avec succès";
-}
 
-/*
-    Modifie le nom s'il satisfait la syntaxe attendue
-*/
-function modifier_nom($nom){
-    $verif = verification_nom_prenom($nom);
-    if ($verif !== "ok")
-        return $verif;
-    
-    $_SESSION["utilisateur"]['nom'] = $nom;
-    return "Nom changé avec succès";
-}
-
-/*
-    Modifie le prénom s'il satisfait la syntaxe attendue
-*/
-function modifier_prenom($prenom){
-    $verif = verification_nom_prenom($prenom);
-    if ($verif !== "ok")
-        return $verif;
-    
-    $_SESSION["utilisateur"]['prenom'] = $prenom;
-    return "Prénom changé avec succès";
-}
-
-/*
-    Modifie le sexe s'il n'avait pas la même valeur auparavant
-*/
-function modifier_sexe($sexe){
-    if ($sexe === $_SESSION["utilisateur"]['sexe'])
-        return "Le sexe avait déjà la valeur ".$sexe.", aucun changement ne sera appliqué";
-    
-    else{
-        return "Le sexe a correctement été changé";
-    }
-}
-
-/*
-    Modifie la date de naissance si elle n'avait pas la même valeur auparavant
-*/
-function modifier_naissance($naissance){
-    if ($naissance === $_SESSION["utilisateur"]['naissance'])
-        return "La date de naissance avait déjà la valeur ".$naissance.", aucun changement ne sera appliqué";
-    
-    else{
-        return "La date de naissance a correctement été changée";
-    }
-}
 
 
 ?>

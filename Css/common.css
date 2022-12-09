@@ -35,6 +35,8 @@ main {
     width: 30%;
     margin: 5px;
     font-size: small;
+    vertical-align: top;
+    height: 400px;
 }
 
 .cocktail-header {

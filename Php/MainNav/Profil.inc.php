@@ -40,6 +40,8 @@
 
 </br>
 
+<?php echo ("Votre sexe actuel : ".$_SESSION["utilisateur"]['sexe']); ?>
+
 <form action="<?php $_SERVER['PHP_SELF'] ?>" method="post" name="Changement_sexe"> 
 
         Changer le genre : <input type="radio" id="Homme" name="nouveau_sexe" value="Homme">
@@ -52,6 +54,8 @@
 </form>
 
 </br>
+
+<?php echo ("Votre date de naissance actuelle : ".$_SESSION["utilisateur"]['naissance']); ?>
 
 <form action="<?php $_SERVER['PHP_SELF'] ?>" method="post" name="Changement_naissance"> 
 

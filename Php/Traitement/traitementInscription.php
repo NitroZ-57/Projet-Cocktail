@@ -2,8 +2,10 @@
 
 if (isset($_POST['inscription'])){
     @$sortie =  creation_utilisateur($_POST['login'], $_POST['mot_de_passe'], $_POST['nom'], $_POST['prenom'], $_POST['sexe'], $_POST['naissance']);
-    echo "<script> alert(\"$sortie\"); document.location.href=\"index.php?page=Navigation\"; </script>"; // cette ligne sert à afficher un message dans une boite d'alerte et revenir sur le menu pour ne pas avoir à reconfirmer le formulaire lors d'une actualisation
-    $_GET["page"] = "Navigation";
+    if($sortie === "utilisateur enegistré avec succès")
+        echo "<script> alert(\"$sortie\"); document.location.href=\"index.php?page=Navigation\"; </script>"; // cette ligne sert à afficher un message dans une boite d'alerte et revenir sur le menu pour ne pas avoir à reconfirmer le formulaire lors d'une actualisation
+    else 
+        echo "<script> alert(\"$sortie\"); document.location.href=\"index.php?page=Inscription\"; </script>";
 }
 
 /* 
@@ -21,8 +23,6 @@ function creation_utilisateur($login, $mdp, $nom, $prenom, $sexe, $naissance){
     if (!($nomverif == "ok")) return $nomverif;
     if (!($prenomverif == "ok")) return $prenomverif;
 
-    //$path = __DIR__ ."\\utils\\".$login.".txt";
-
     $path = realpath("Sauvegardes\\");
     $path = $path."\\".$login.".txt";
 
@@ -30,16 +30,16 @@ function creation_utilisateur($login, $mdp, $nom, $prenom, $sexe, $naissance){
 
     if ($file === false ) return "erreur lors de l'ouverture du fichier de sauvegarde : ".$file; //gestion erreurs ?
 
-    $mdp = password_hash($mdp, PASSWORD_DEFAULT);
+    $mdp = md5($mdp, false);
 
     fprintf($file, 
     "login : %s\n
-mot de passe haché : %s\n
-nom : %s\n
-prénom : %s\n
-sexe : %s\n
-date de naissance : %s\n\n", $login, $mdp, $nom, $prenom, $sexe, $naissance);
-//le double \n est intentionnel, pour faciliter la sauvegarde des favoris
+    mot de passe haché : %s\n
+    nom : %s\n
+    prénom : %s\n
+    sexe : %s\n
+    date de naissance : %s\n\n", $login, $mdp, $nom, $prenom, $sexe, $naissance);
+    //le double \n est intentionnel, pour faciliter la sauvegarde des favoris
 
     fclose($file);
 
@@ -58,21 +58,13 @@ date de naissance : %s\n\n", $login, $mdp, $nom, $prenom, $sexe, $naissance);
     $_SESSION["utilisateur"]['hash'] = $mdp;
 
     foreach($_SESSION['favories'] as $fav){
-
-        //$recette = recuperer_cocktail_avec_nom($Recettes, $fav['titre']);
-/*
-        $nom_cocktail = nom_du_cocktail($fav);
-
-        $_SESSION["utilisateur"]["favories"][$nom_cocktail] = $fav;*/
         ajouter_favoris($fav);
-        
-}
+    }
+
+    $_SESSION["favories"] = array();
 
     return "utilisateur enegistré avec succès";
 
 }
-
-    /* TRAITER ICI LE FORMULAIRE D'INSCRIPTION DANS 
-    Inscription.inc.php dans le fichier [Header] */
 
 ?>
